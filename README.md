@@ -1,11 +1,11 @@
 # DependencyInjection
-Designpattern Dependency Injection
-refactoring guru -> Seite für Pattern
+Designpattern Dependency Injection<br>
+refactoring guru -> Seite für Pattern<br>
 
-Leitfragen:
-Framework nutzung?
+Leitfragen:<br>
+Framework nutzung?<br>
 
-Pitch:
-Dependency Injection in c#
-Umsetzung:
-Repo öffentlich machen -> Übungsaufgabe stellen
+Pitch:<br>
+Dependency Injection in c#<br>
+Umsetzung:<br>
+Repo öffentlich machen -> Übungsaufgabe stellen<br>
