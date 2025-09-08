@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "RxraJPO7kjQ=",
+  "success": true,
+  "projectFilePath": "C:\\HScode\\Berufschule\\LF10\\DependencyInjection\\DependencyInjection.Console\\DependencyInjection.Console.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\mr\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\9.0.8\\microsoft.extensions.dependencyinjection.9.0.8.nupkg.sha512",
+    "C:\\Users\\mr\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\9.0.8\\microsoft.extensions.dependencyinjection.abstractions.9.0.8.nupkg.sha512"
+  ],
+  "logs": []
+}
