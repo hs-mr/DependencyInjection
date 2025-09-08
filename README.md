@@ -12,6 +12,38 @@ Repo öffentlich machen -> Übungsaufgabe stellen<br>
 
 test
 
+## Was ist ein Framework?
+
+**Werkzeugkasten** aus fertigen Bibliotheken, Funktionen und Regeln
+
+<aside>
+🚧
+
+Beispiel **Entity Framework**:
+
+EF ist ein ORM-Framework (Object-Relational Mapping)
+
+- Es verbindet meine C#-Objekte mit einer Datenbank, ohne, dass ich selber SQL schreiben muss
+
+Ohne EF:
+
+Tabelle `Users` soll in eine Datenbank eingefügt werden
+
+```sql
+SELECT * FROM Users WHERE Id = 5;
+```
+
+Mit EF:
+
+```csharp
+var user = db.Users.First(u ⇒ [u.Id](http://u.Id) == 5);
+```
+
+EF weiß, dass die Klasse User zu der Tabelle `Users` gehört
+
+</aside>
+
+
 ## **Was ist Dependency Injection?**
 
 - Statt dass eine Klasse **selbst** ihre Abhängigkeiten erstellt (`new`), bekommt sie diese **von außen übergeben**.
