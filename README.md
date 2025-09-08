@@ -115,10 +115,13 @@ public class UserController : Controller
 - **Lebensdauersteuerung:** DI regelt, wann ein `DbContext` erstellt und wieder freigegeben wird (typischerweise pro HTTP-Request = *Scoped*).
 - **Sauberer Code:** Deine Klassen hängen nicht davon ab, wie der `DbContext` erstellt wird.
 
-## Constructor Injection
+## 🔹 1. Constructor Injection (am häufigsten & empfohlen)
 
-Beispiel:
+👉 Die Abhängigkeiten werden über den **Konstruktor** übergeben.
 
+**Beispiel:**
+
+```csharp
 public class UserService
 {
     private readonly IUserRepository _repo;
@@ -131,52 +134,54 @@ public class UserService
 
     public User GetUser(int id) => _repo.Get(id);
 }
-
+```
 
 ✅ Vorteile:
 
-Abhängigkeiten sind zwingend erforderlich (keine Null-Referenzen).
-
-Gut testbar.
-
-Am besten von Frameworks wie ASP.NET Core unterstützt.
+- Abhängigkeiten sind **zwingend erforderlich** (keine Null-Referenzen).
+- Gut testbar.
+- Am besten von Frameworks wie ASP.NET Core unterstützt.
 
 ❌ Nachteil:
 
-Wenn zu viele Abhängigkeiten nötig sind → „Constructor Hell“ (zu viele Parameter).
+- Wenn zu viele Abhängigkeiten nötig sind → „Constructor Hell“ (zu viele Parameter).
 
-## Property Injection
+---
 
-👉 Die Abhängigkeit wird über eine öffentliche Property gesetzt, nicht im Konstruktor.
+## 🔹 2. Property Injection
 
-Beispiel:
+👉 Die Abhängigkeit wird über eine **öffentliche Property** gesetzt, nicht im Konstruktor.
 
+**Beispiel:**
+
+```csharp
 public class UserService
 {
     public IUserRepository Repo { get; set; } // von außen setzbar
 
     public User GetUser(int id) => Repo.Get(id);
 }
-
+```
 
 ✅ Vorteil:
 
-Optional, falls die Abhängigkeit nicht immer gebraucht wird.
-
-Weniger Konstruktor-Parameter.
+- Optional, falls die Abhängigkeit nicht immer gebraucht wird.
+- Weniger Konstruktor-Parameter.
 
 ❌ Nachteile:
 
-Gefahr von NullReferenceExceptions, wenn die Property nicht gesetzt wurde.
+- Gefahr von **NullReferenceExceptions**, wenn die Property nicht gesetzt wurde.
+- Abhängigkeit ist nicht mehr „immutable“.
 
-Abhängigkeit ist nicht mehr „immutable“.
+---
 
-## Method Injection
+## 🔹 3. Method Injection
 
-👉 Die Abhängigkeit wird direkt in die Methode übergeben, die sie braucht.
+👉 Die Abhängigkeit wird **direkt in die Methode** übergeben, die sie braucht.
 
-Beispiel:
+**Beispiel:**
 
+```csharp
 public class UserService
 {
     public User GetUser(int id, IUserRepository repo)
@@ -184,26 +189,27 @@ public class UserService
         return repo.Get(id);
     }
 }
-
+```
 
 ✅ Vorteil:
 
-Sehr gezielt: Die Abhängigkeit ist nur dort verfügbar, wo sie gebraucht wird.
-
-Praktisch, wenn nur selten benötigt.
+- Sehr gezielt: Die Abhängigkeit ist nur dort verfügbar, wo sie gebraucht wird.
+- Praktisch, wenn nur selten benötigt.
 
 ❌ Nachteile:
 
-Methoden-Signatur kann „aufgebläht“ wirken.
+- Methoden-Signatur kann „aufgebläht“ wirken.
+- Weniger elegant, wenn viele Methoden dieselbe Abhängigkeit brauchen.
 
-Weniger elegant, wenn viele Methoden dieselbe Abhängigkeit brauchen.
+---
 
-## Interface Injection (seltener, eher theoretisch)
+## 🔹 4. Interface Injection (seltener, eher theoretisch)
 
-👉 Ein Service verlangt per Interface, dass ihm eine Abhängigkeit eingespritzt werden kann.
+👉 Ein Service verlangt per Interface, dass ihm eine Abhängigkeit **eingespritzt** werden kann.
 
-Beispiel:
+**Beispiel:**
 
+```csharp
 public interface IInjectable
 {
     void Inject(IUserRepository repo);
@@ -218,14 +224,13 @@ public class UserService : IInjectable
         _repo = repo;
     }
 }
-
+```
 
 ✅ Vorteil:
 
-Klare „Verpflichtung“ durch das Interface.
+- Klare „Verpflichtung“ durch das Interface.
 
 ❌ Nachteile:
 
-Komplexer, weniger gebräuchlich.
-
-In modernen .NET-Projekten fast nie genutzt.
+- Komplexer, weniger gebräuchlich.
+- In modernen .NET-Projekten fast nie genutzt.
