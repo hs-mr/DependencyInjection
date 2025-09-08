@@ -12,36 +12,6 @@ Repo öffentlich machen -> Übungsaufgabe stellen<br>
 
 test
 
-## Was ist ein Framework?
-
-**Werkzeugkasten** aus fertigen Bibliotheken, Funktionen und Regeln
-
-<aside>
-🚧
-
-Beispiel **Entity Framework**:
-
-EF ist ein ORM-Framework (Object-Relational Mapping)
-
-- Es verbindet meine C#-Objekte mit einer Datenbank, ohne, dass ich selber SQL schreiben muss
-
-Ohne EF:
-
-Tabelle `Users` soll in eine Datenbank eingefügt werden
-
-```sql
-SELECT * FROM Users WHERE Id = 5;
-```
-
-Mit EF:
-
-```csharp
-var user = db.Users.First(u ⇒ [u.Id](http://u.Id) == 5);
-```
-
-EF weiß, dass die Klasse User zu der Tabelle `Users` gehört
-
-</aside>
 
 
 ## **Was ist Dependency Injection?**
@@ -80,72 +50,6 @@ public class UserService
 
 ➡ Flexibler, weil man z. B. im Test ein Fake-Repo einschleusen kann.
 
-## Wie hängt das mit Entity Framework zusammen?
-
-EF arbeitet meistens mit einem **DbContext**, z. B.:
-
-```csharp
-public class AppDbContext : DbContext
-{
-    public DbSet<User> Users { get; set; }
-}
-```
-
-Früher hat man oft so etwas gemacht:
-
-```csharp
-var context = new AppDbContext();
-var users = context.Users.ToList();
-```
-
-➡ Problem: Der Code erzeugt selbst den `AppDbContext` → schwer zu testen, fest verdrahtet.
-
-## Dependency Injection mit EF Core
-
-In **ASP.NET Core** wird DI automatisch unterstützt.
-
-Man registriert den `DbContext` einmal im **DI-Container** (meist in `Program.cs` oder `Startup.cs`):
-
-```csharp
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-```
-
-Was passiert hier?
-
-- Man sagst dem DI-Container: „Wenn jemand `AppDbContext` braucht, erstelle ihn bitte so, mit dieser ConnectionString-Einstellung.“
-- Jedes Mal, wenn eine Klasse `AppDbContext` im Konstruktor anfordert, liefert DI automatisch eine passende Instanz.
-
-## Beispiel im Controller
-
-```csharp
-public class UserController : Controller
-{
-    private readonly AppDbContext _context;
-
-    // Der DbContext wird automatisch injiziert
-    public UserController(AppDbContext context)
-    {
-        _context = context;
-    }
-
-    public IActionResult Index()
-    {
-        var users = _context.Users.ToList();
-        return View(users);
-    }
-}
-```
-
-➡ Man musst **nicht** `new AppDbContext()` aufrufen.
-
-➡ EF + DI kümmern sich darum, dass der Controller den richtigen `DbContext` bekommt.
-
-## Vorteile der DI mit EF
-
-- **Testbarkeit:** Man kann einen Fake/InMemory-DbContext verwenden.
-- **Lebensdauersteuerung:** DI regelt, wann ein `DbContext` erstellt und wieder freigegeben wird (typischerweise pro HTTP-Request = *Scoped*).
-- **Sauberer Code:** Deine Klassen hängen nicht davon ab, wie der `DbContext` erstellt wird.
 
 ## 🔹 1. Constructor Injection (am häufigsten & empfohlen)
 
